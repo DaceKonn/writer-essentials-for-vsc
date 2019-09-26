@@ -10,6 +10,7 @@
 		"Other"
 	],
 	"activationEvents": [
+		"onLanguage:markdown",
 		"onCommand:extension.helloWorld"
 	],
 	"main": "./out/extension.js",
