@@ -10,17 +10,27 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onLanguage:markdown",
-		"onCommand:extension.helloWorld"
+		"onLanguage:markdown"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [
-			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
-			}
-		]
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "writer-essentials-container",
+					"title": "Writer Essentials",
+					"icon": "media/dep.svg"
+				}
+			]
+		},
+		"views": {
+			"writer-essentials-container": [
+				{
+					"id": "markdown-front-matter-view",
+					"name": "Front Matter"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
@@ -31,13 +41,14 @@
 	},
 	"devDependencies": {
 		"@types/glob": "^7.1.1",
+		"@types/js-yaml": "^3.12.1",
 		"@types/mocha": "^5.2.6",
 		"@types/node": "^10.12.21",
 		"@types/vscode": "^1.38.0",
 		"glob": "^7.1.4",
 		"mocha": "^6.1.4",
-		"typescript": "^3.3.1",
 		"tslint": "^5.12.1",
+		"typescript": "^3.3.1",
 		"vscode-test": "^1.2.0"
 	}
 }
