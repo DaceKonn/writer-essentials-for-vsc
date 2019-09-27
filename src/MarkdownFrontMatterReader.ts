@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import * as yaml from 'js-yaml';
-import { SSL_OP_CISCO_ANYCONNECT } from 'constants';
 
 export class MarkdownFrontMatterReader {
     tempDoc: any;
