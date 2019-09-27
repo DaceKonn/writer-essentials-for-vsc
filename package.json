@@ -28,6 +28,10 @@
 				{
 					"id": "markdown-front-matter-view",
 					"name": "Front Matter"
+				},
+				{
+					"id": "markdown-goal-view",
+					"name": "Goals"
 				}
 			]
 		}
