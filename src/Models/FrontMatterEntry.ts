@@ -9,7 +9,7 @@ export class FrontMatterEntry extends vscode.TreeItem {
     isSpecialType: boolean = this.specialType !== undefined;
 
     constructor(key: string, value: string | number | boolean | Date, subCollection?: Array<FrontMatterEntry>, specialType?: string) {
-        super(key+': '+value, subCollection !== undefined ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None);
+        super(key+': '+value, subCollection !== undefined ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.None);
         this.key = key;
         this.value = value;
         this.subCollection = subCollection;
@@ -23,6 +23,7 @@ export class FrontMatterEntry extends vscode.TreeItem {
                     title: 'Open'
                 };
                 sub.label = '> '+ sub.label;
+                sub.tooltip = 'Open: /ProjectBible/'+this.specialType+'/'+sub.value+'.md';
             }
         }
     }
