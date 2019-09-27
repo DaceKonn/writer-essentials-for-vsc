@@ -5,41 +5,25 @@ export class FrontMatterEntry extends vscode.TreeItem {
     key: string;
     value: string | number | boolean | Date;
     subCollection: Array<FrontMatterEntry> | undefined;
+    specialType: string | undefined;
+    isSpecialType: boolean = this.specialType !== undefined;
 
-    constructor(key: string, value: string | number | boolean | Date, subCollection?: Array<FrontMatterEntry>) {
+    constructor(key: string, value: string | number | boolean | Date, subCollection?: Array<FrontMatterEntry>, specialType?: string) {
         super(key+': '+value, subCollection !== undefined ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None);
         this.key = key;
         this.value = value;
         this.subCollection = subCollection;
+        this.specialType = specialType;
+        
+        if (this.specialType !== undefined && this.subCollection !== undefined) {
+            for (let sub of this.subCollection) {
+                sub.command = {
+                    command: 'vscode.open',
+                    arguments: [vscode.Uri.parse('file:'+vscode.workspace.rootPath+'/ProjectBible/'+this.specialType+'/'+sub.value+'.md')],
+                    title: 'Open'
+                };
+                sub.label = '> '+ sub.label;
+            }
+        }
     }
-
-    // key: string;
-    // value: string | number | boolean | Date;
-    // array: Array<string> | Array<number> | Array<boolean> | Array<Date> | undefined;
-    // subCollection: Array<FrontMatterEntry> | undefined;
-    // isArray: boolean;
-    // hasSubCollection: boolean | undefined;
-
-    // constructor (key: string, value: any, collapsibleState: vscode.TreeItemCollapsibleState, asSubObject?: boolean){
-    //     super('', collapsibleState);
-    //     this.key = key;
-    //     this.isArray = false;
-    //     if (asSubObject) {
-    //         this.value = '';
-    //         this.subCollection = value;
-    //     }
-    //     else {
-    //         if (Array.isArray(value)) {
-    //             this.value = '';
-    //             this.isArray = true;
-    //             this.array = value;
-    //         }
-    //         else {
-    //             this.value = value;
-    //         }
-    //     }
-    //     this.hasSubCollection = asSubObject; 
-
-    //     super.label = this.value !== '' ? this.key + (this.isArray ? '[]' : ': ' + this.value) : this.key; 
-    // }
 }

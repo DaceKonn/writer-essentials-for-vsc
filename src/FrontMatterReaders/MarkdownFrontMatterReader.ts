@@ -3,6 +3,7 @@ import * as yaml from 'js-yaml';
 import { FrontMatterEntry } from '../Models/FrontMatterEntry';
 import { markdownFrontMatterTreeDataProvider } from '../extension';
 import { type } from 'os';
+import { isSpecialType } from '../Models/SpecialFrontMatterTypes';
 
 export class MarkdownFrontMatterReader {
     tempDoc: any;
@@ -65,7 +66,7 @@ export class MarkdownFrontMatterReader {
             for (let key of keys) {
                 var value = input[key];
                 if (Array.isArray(value)) {
-                    out.push(new FrontMatterEntry(key + ' [' + value.length + ']', '', this.getFrontMatter(value)));
+                    out.push(new FrontMatterEntry(key + ' [' + value.length + ']', '', this.getFrontMatter(value), isSpecialType(key) ? key : undefined));
                 }
                 else if (typeof(value) === 'object') {
                     out.push(new FrontMatterEntry(key, '', this.getFrontMatter(value)));
