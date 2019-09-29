@@ -1,6 +1,8 @@
-import * as vscode from 'vscode'
+import * as vscode from 'vscode';
+import { markdownFrontMatterReader } from '../extension';
+import { WordCounter } from '../Helpers/wordCounter';
 
-export class MarkdownGoalsTreeDataProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
+export class StatisticsTreeDataProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
     private _onDidChangeTreeData: vscode.EventEmitter<vscode.TreeItem | null> = new vscode.EventEmitter<vscode.TreeItem | null>();
 	readonly onDidChangeTreeData: vscode.Event<vscode.TreeItem | null> = this._onDidChangeTreeData.event;
 
@@ -16,18 +18,18 @@ export class MarkdownGoalsTreeDataProvider implements vscode.TreeDataProvider<vs
         console.log('getChildren');
         if (element === undefined)
         {
-            return markdownFrontMatterReader.getFrontMatterFromTemp();
+            var count = new WordCounter().updateWordCount();
+            return [];
         }
         else {
-            if (element.subCollection !== undefined) {
-                return element.subCollection;
-            }
+
             return [];
         }
     }
 
     getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
         console.log('getTreeItem');
+        
 		return element;
 	}
 }
