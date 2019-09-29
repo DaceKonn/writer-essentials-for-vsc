@@ -30,8 +30,8 @@
 					"name": "Front Matter"
 				},
 				{
-					"id": "markdown-goal-view",
-					"name": "Goals"
+					"id": "markdown-stats-view",
+					"name": "Statistics"
 				}
 			]
 		}

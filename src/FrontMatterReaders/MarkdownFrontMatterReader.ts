@@ -4,10 +4,11 @@ import { FrontMatterEntry } from '../Models/FrontMatterEntry';
 import { markdownFrontMatterTreeDataProvider } from '../extension';
 import { type } from 'os';
 import { isSpecialType } from '../Models/SpecialFrontMatterTypes';
+import * as regExp from '../regexpConstants';
 
 export class MarkdownFrontMatterReader {
     tempDoc: any;
-    mdFrontMatterRegExp: RegExp = /(?<=---\s)[\s\S]*?(?=\s---)/;
+    //mdFrontMatterRegExp: RegExp = /(?<=---\s)[\s\S]*?(?=\s---)/;
 
 	handleTextDocument(document: vscode.TextDocument | undefined): any {
         if (document !== undefined)
@@ -30,7 +31,7 @@ export class MarkdownFrontMatterReader {
 	}
 
     getFrontMatterFromString(text: string) {
-        var capture = text.match(this.mdFrontMatterRegExp);
+        var capture = text.match(regExp.mdFrontMatterContentRegExp);
         if (capture !== null)
         {
             var doc = yaml.safeLoad(capture[0]);
