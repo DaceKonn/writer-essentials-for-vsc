@@ -5,10 +5,35 @@ import { markdownFrontMatterTreeDataProvider, statisticsTreeDataProvider } from 
 import { type } from 'os';
 import { isSpecialType } from '../Models/SpecialFrontMatterTypes';
 import * as regExp from '../regexpConstants';
+import { window } from 'vscode';
 
 export class MarkdownFrontMatterReader {
     tempDoc: any;
     //mdFrontMatterRegExp: RegExp = /(?<=---\s)[\s\S]*?(?=\s---)/;
+
+    updateFromEditor() {
+        let editor = window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+
+        let doc = editor.document;
+
+        if (doc.languageId === "markdown") {
+            try {
+                var frontM = this.getFrontMatterFromString(doc.getText());
+                this.tempDoc = frontM;
+                markdownFrontMatterTreeDataProvider.refresh();
+            }
+            catch {
+
+            }
+            
+        } else {
+            console.log('!markdown');
+           return;
+        } 
+    }
 
 	handleTextDocument(document: vscode.TextDocument | undefined): any {
         if (document !== undefined)
@@ -42,6 +67,9 @@ export class MarkdownFrontMatterReader {
     }
 
     getFrontMatterFromTemp() {
+        if (this.tempDoc === undefined) {
+            this.updateFromEditor();
+        }
         return this.getFrontMatter(this.tempDoc);
     }
 
