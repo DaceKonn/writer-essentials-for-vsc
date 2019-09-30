@@ -1,10 +1,11 @@
 import * as vscode from 'vscode';
 import { markdownFrontMatterReader } from '../extension';
 import { WordCounter } from '../Helpers/wordCounter';
+import { StatisticsEntry } from '../Models/StatisticsEntry';
 
-export class StatisticsTreeDataProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
-    private _onDidChangeTreeData: vscode.EventEmitter<vscode.TreeItem | null> = new vscode.EventEmitter<vscode.TreeItem | null>();
-	readonly onDidChangeTreeData: vscode.Event<vscode.TreeItem | null> = this._onDidChangeTreeData.event;
+export class StatisticsTreeDataProvider implements vscode.TreeDataProvider<StatisticsEntry> {
+    private _onDidChangeTreeData: vscode.EventEmitter<StatisticsEntry | null> = new vscode.EventEmitter<StatisticsEntry | null>();
+	readonly onDidChangeTreeData: vscode.Event<StatisticsEntry | null> = this._onDidChangeTreeData.event;
 
     constructor(private context: vscode.ExtensionContext) {
 	}
@@ -12,21 +13,23 @@ export class StatisticsTreeDataProvider implements vscode.TreeDataProvider<vscod
 	refresh(): void {
 		this._onDidChangeTreeData.fire();
 	}
-    getChildren(element?: vscode.TreeItem | undefined): vscode.ProviderResult<vscode.TreeItem[]> {
+    getChildren(element?: StatisticsEntry | undefined): vscode.ProviderResult<StatisticsEntry[]> {
         if (element === undefined)
         {
-            var out: vscode.TreeItem[] = [];
+            var out: StatisticsEntry[] = [];
             var count = new WordCounter().updateWordCount();
-            out.push(new vscode.TreeItem('File word count: '+count,vscode.TreeItemCollapsibleState.None));
+            var sub: StatisticsEntry[] = [];
+            sub.push(new StatisticsEntry('Word count', count));
+            out.push(new StatisticsEntry('File', '', sub, true));
             return out;
         }
         else {
 
-            return [];
+            return element.subCollection;
         }
     }
 
-    getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
+    getTreeItem(element: StatisticsEntry): vscode.TreeItem {
 		return element;
 	}
 }
