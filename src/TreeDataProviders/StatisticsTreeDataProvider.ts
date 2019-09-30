@@ -7,15 +7,12 @@ export class StatisticsTreeDataProvider implements vscode.TreeDataProvider<vscod
 	readonly onDidChangeTreeData: vscode.Event<vscode.TreeItem | null> = this._onDidChangeTreeData.event;
 
     constructor(private context: vscode.ExtensionContext) {
-        console.log('constructor');
 	}
 
 	refresh(): void {
-        console.log('refresh');
 		this._onDidChangeTreeData.fire();
 	}
     getChildren(element?: vscode.TreeItem | undefined): vscode.ProviderResult<vscode.TreeItem[]> {
-        console.log('getChildren');
         if (element === undefined)
         {
             var out: vscode.TreeItem[] = [];
@@ -30,8 +27,6 @@ export class StatisticsTreeDataProvider implements vscode.TreeDataProvider<vscod
     }
 
     getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
-        console.log('getTreeItem');
-        
 		return element;
 	}
 }
