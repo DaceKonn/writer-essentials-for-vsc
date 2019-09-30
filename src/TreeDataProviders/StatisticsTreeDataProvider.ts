@@ -18,8 +18,10 @@ export class StatisticsTreeDataProvider implements vscode.TreeDataProvider<vscod
         console.log('getChildren');
         if (element === undefined)
         {
+            var out: vscode.TreeItem[] = [];
             var count = new WordCounter().updateWordCount();
-            return [];
+            out.push(new vscode.TreeItem('File word count: '+count,vscode.TreeItemCollapsibleState.None));
+            return out;
         }
         else {
 

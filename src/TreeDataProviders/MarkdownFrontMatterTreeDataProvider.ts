@@ -7,15 +7,12 @@ export class MarkdownFrontMatterTreeDataProvider implements vscode.TreeDataProvi
 	readonly onDidChangeTreeData: vscode.Event<FrontMatterEntry | null> = this._onDidChangeTreeData.event;
 
     constructor(private context: vscode.ExtensionContext) {
-        console.log('constructor');
 	}
 
 	refresh(): void {
-        console.log('refresh');
 		this._onDidChangeTreeData.fire();
 	}
     getChildren(element?: FrontMatterEntry | undefined): vscode.ProviderResult<FrontMatterEntry[]> {
-        console.log('getChildren');
         if (element === undefined)
         {
             return markdownFrontMatterReader.getFrontMatterFromTemp();
@@ -29,7 +26,6 @@ export class MarkdownFrontMatterTreeDataProvider implements vscode.TreeDataProvi
     }
 
     getTreeItem(element: FrontMatterEntry): vscode.TreeItem {
-        console.log('getTreeItem');
 		return element;
 	}
 }
