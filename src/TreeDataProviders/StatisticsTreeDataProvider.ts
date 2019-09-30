@@ -19,7 +19,8 @@ export class StatisticsTreeDataProvider implements vscode.TreeDataProvider<Stati
             var out: StatisticsEntry[] = [];
             var count = new WordCounter().updateWordCount();
             var sub: StatisticsEntry[] = [];
-            sub.push(new StatisticsEntry('Word count', count));
+            sub.push(new StatisticsEntry('Word count', count.wordCount));
+            sub.push(new StatisticsEntry('Character count', count.characterCount));
             out.push(new StatisticsEntry('File', '', sub, true));
             return out;
         }

@@ -1,16 +1,17 @@
 import { TextDocument, window } from "vscode";
 import { mdFrontMatterSectionRegExp } from "../regexpConstants";
+import { TextCounts } from "../Models/TextCounts";
 
 export class WordCounter {
 
-    public updateWordCount() {
+    public updateWordCount(): TextCounts {
         console.log('Update word count');
         // Get the current text editor
         let editor = window.activeTextEditor;
         if (!editor) {
             console.log("!editor");
           //  this._statusBarItem.hide();
-            return 0;
+            return new TextCounts();
         }
 
         let doc = editor.document;
@@ -24,24 +25,30 @@ export class WordCounter {
           //  this._statusBarItem.show();
         } else {
             console.log('!markdown');
-           return 0;
+           return new TextCounts();
         } 
     }
 
-    public _getWordCount(doc: TextDocument): number {
+    public _getWordCount(doc: TextDocument): TextCounts {
         console.log('Get Word Count');
+        let textCounts = new TextCounts();
+
         let docContent = doc.getText();
 
         // Parse out front matter
         docContent = docContent.replace(mdFrontMatterSectionRegExp, '');
+
+        //get character count with white spaces etc.
+        textCounts.characterCount = docContent.length;
+        
         // Parse out unwanted whitespace so the split is accurate
         docContent = docContent.replace(/(< ([^>]+)<)/g, '').replace(/\s+/g, ' ');
         docContent = docContent.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-        let wordCount = 0;
         if (docContent !== "") {
-            wordCount = docContent.split(" ").length;
+            textCounts.wordCount = docContent.split(" ").length;
+            
         }
 
-        return wordCount;
+        return textCounts;
     }
 }
