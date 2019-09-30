@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as yaml from 'js-yaml';
 import { FrontMatterEntry } from '../Models/FrontMatterEntry';
-import { markdownFrontMatterTreeDataProvider } from '../extension';
+import { markdownFrontMatterTreeDataProvider, statisticsTreeDataProvider } from '../extension';
 import { type } from 'os';
 import { isSpecialType } from '../Models/SpecialFrontMatterTypes';
 import * as regExp from '../regexpConstants';
@@ -26,6 +26,7 @@ export class MarkdownFrontMatterReader {
                 }
 
                 markdownFrontMatterTreeDataProvider.refresh();
+                statisticsTreeDataProvider.refresh();
             }
         }
 	}
