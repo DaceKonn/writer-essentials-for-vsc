@@ -4,7 +4,7 @@ import { FrontMatterEntry } from '../Models/FrontMatterEntry';
 import { markdownFrontMatterTreeDataProvider, statisticsTreeDataProvider } from '../extension';
 import { type } from 'os';
 import { isSpecialType } from '../Models/SpecialFrontMatterTypes';
-import * as regExp from '../regexpConstants';
+import * as regExp from '../RegexpConstants';
 import { window } from 'vscode';
 
 export class MarkdownFrontMatterReader {

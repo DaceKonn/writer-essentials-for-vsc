@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { markdownFrontMatterReader } from '../extension';
-import { WordCounter } from '../Helpers/wordCounter';
+import { WordCounter } from '../Helpers/WordCounter';
 import { StatisticsEntry } from '../Models/StatisticsEntry';
 
 export class StatisticsTreeDataProvider implements vscode.TreeDataProvider<StatisticsEntry> {
