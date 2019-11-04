@@ -19,7 +19,7 @@ export class FrontMatterEntry extends vscode.TreeItem {
             for (let sub of this.subCollection) {
                 sub.command = {
                     command: 'vscode.open',
-                    arguments: [vscode.Uri.parse('file:'+vscode.workspace.workspaceFolders[0]+'/ProjectBible/'+this.specialType+'/'+sub.value+'.md')],
+                    arguments: [vscode.Uri.parse('file:'+vscode.workspace.workspaceFolders[0].name+'/ProjectBible/'+this.specialType+'/'+sub.value+'.md')],
                     title: 'Open'
                 };
                 sub.label = '> '+ sub.label;
