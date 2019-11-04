@@ -4,6 +4,7 @@ import * as vscode from 'vscode';
 import { MarkdownFrontMatterReader } from './FrontMatterReaders/MarkdownFrontMatterReader';
 import { MarkdownFrontMatterTreeDataProvider } from './TreeDataProviders/MarkdownFrontMatterTreeDataProvider';
 import { StatisticsTreeDataProvider } from './TreeDataProviders/StatisticsTreeDataProvider';
+import { ProjectFilesHandler } from './Helpers/ProjectFilesHandler';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -24,7 +25,10 @@ export function activate(context: vscode.ExtensionContext) {
 
 	vscode.window.registerTreeDataProvider('markdown-front-matter-view', markdownFrontMatterTreeDataProvider);
 	vscode.window.registerTreeDataProvider('markdown-stats-view', statisticsTreeDataProvider);
-	//context.subscriptions.push(disposable);
+
+	var pfh = new ProjectFilesHandler();
+	pfh.initProjectStructure();
+		//context.subscriptions.push(disposable);
 }
 
 // this method is called when your extension is deactivated
