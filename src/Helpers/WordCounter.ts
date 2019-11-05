@@ -72,7 +72,7 @@ export class WordCounter {
             var history: WordCountsModel[] = this.loadFileCountHistory(doc);
             var maxDate = Math.max.apply(null, history.map(value =>new Date(value.date).getTime()));
             var top = history.find(value => new Date(value.date).getTime() === maxDate );
-            if (top !== undefined && top.charCount !== textCounts.characterCount){
+            if (top === undefined || top.charCount !== textCounts.characterCount){
                 var entry: WordCountsModel = new WordCountsModel(ProjectFilesHandler.stripPath(doc.uri.path), doc.uri.path, textCounts.wordCount, textCounts.characterCount);
                 if (Date.now() < maxDate + 1800000) {
                     history = history.filter(value => new Date(value.date).getTime() !== maxDate );
@@ -97,6 +97,8 @@ export class WordCounter {
            // var streamReader = fs.createReadStream(ProjectFilesHandler.statisticsSaveFilePath(doc.uri)+ '.json');
             var content: any = fs.readFileSync(ProjectFilesHandler.statisticsSaveFilePath(doc.uri)+ '.json','utf8');
            // streamReader.close();
+           try
+           {
             var parsed = JSON.parse(content);
             if (parsed === undefined || parsed === null) {
                 return [];
@@ -106,6 +108,12 @@ export class WordCounter {
                     return WordCountsModel.decodeFromJSON(element);
                 });
             }
+           }
+           catch
+           {
+               return [];
+           }
+
         }
     }
 
