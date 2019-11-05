@@ -41,6 +41,11 @@
 			  "command": "writer-essentials.initFolders",
 			  "title": "Init Project Folders",
 			  "category": "Writer Essentials"
+			},
+			{
+				"command": "writer-essentials.openOrCreateFile",
+				"title": "Open or create file",
+				"category": "Writer Essentials"
 			}
 		  ]
 	},

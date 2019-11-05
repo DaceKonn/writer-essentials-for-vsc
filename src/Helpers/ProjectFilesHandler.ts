@@ -14,7 +14,15 @@ export class ProjectFilesHandler {
             ProjectFilesHandler.initProjectFolders();
         };
 
-	    context.subscriptions.push(vscode.commands.registerCommand(initFoldersCommand, initFoldersCommandHandler));
+        context.subscriptions.push(vscode.commands.registerCommand(initFoldersCommand, initFoldersCommandHandler));
+        
+        const openOrCreateFileCommand = 'writer-essentials.openOrCreateFile';
+
+        const openOrCreateFileCommandHandler = (uri: string) => {
+            ProjectFilesHandler.openOrCreateFile(uri);
+        };
+
+        context.subscriptions.push(vscode.commands.registerCommand(openOrCreateFileCommand, openOrCreateFileCommandHandler));
     }
 
 	public static initFoldersCommandHandler = () => {
@@ -22,11 +30,6 @@ export class ProjectFilesHandler {
 	}
 
     public static initProjectFolders() {
-        if (vscode.workspace.workspaceFolders === undefined || vscode.workspace.workspaceFolders.length === 0) {
-            vscode.window.showWarningMessage("In order to initialize project folders you need to set up workspace first");
-            return;
-        }
-
         var root = this.getRoot();
         if (root !== undefined) {
             var folders = getProjectFolders();
@@ -38,6 +41,35 @@ export class ProjectFilesHandler {
         }
 
         vscode.window.showInformationMessage("Writer Essentials initialized folders");
+    }
+
+    public static openOrCreateFile(uri: string) {
+        if (!fs.existsSync(vscode.Uri.parse('file:'+this.getRoot()+uri).fsPath)) {
+            vscode.window.showInformationMessage("File doesn't exist");
+            const newFile = vscode.Uri.parse('untitled:' +this.getRoot()+ uri);
+            
+            vscode.workspace.openTextDocument(newFile).then(document => {
+                const edit = new vscode.WorkspaceEdit();
+                edit.insert(newFile, new vscode.Position(0, 0), "---\n\tauthor: anonymous\n---\n");
+                return vscode.workspace.applyEdit(edit).then(success => {
+                    if (success) {
+                        vscode.window.showTextDocument(document);
+                    } else {
+                        vscode.window.showInformationMessage('Error!');
+                    }
+                });
+            });
+
+        }
+        else {
+            vscode.workspace.openTextDocument(vscode.Uri.parse('file:'+this.getRoot()+uri)).then((a: vscode.TextDocument) => {
+                vscode.window.showTextDocument(a, 1, false);
+            }, (error: any) => {
+                console.error(error);
+                debugger;
+            });
+        }
+        
     }
 
     private static getRoot() {
