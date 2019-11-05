@@ -53,18 +53,21 @@ export class WordCounter {
             
         }
 
-        var history: WordCountsModel[] = this.loadFileCountHistory(doc);
-
-        var entry: WordCountsModel = new WordCountsModel(ProjectFilesHandler.stripPath(doc.uri.path), doc.uri.path, textCounts.wordCount, textCounts.characterCount);
-        var maxDate =Math.max.apply(null, history.map(value =>new Date(value.date).getTime()));
-
-        if (Date.now() < maxDate + 1800000) {
-            history = history.filter(value => new Date(value.date).getTime() !== maxDate );
+        if (doc.uri.path.indexOf('/Manuscripts/') !== -1)
+        {
+            var history: WordCountsModel[] = this.loadFileCountHistory(doc);
+            var maxDate = Math.max.apply(null, history.map(value =>new Date(value.date).getTime()));
+            var top = history.find(value => new Date(value.date).getTime() === maxDate );
+            if (top !== undefined && top.charCount !== textCounts.characterCount){
+                var entry: WordCountsModel = new WordCountsModel(ProjectFilesHandler.stripPath(doc.uri.path), doc.uri.path, textCounts.wordCount, textCounts.characterCount);
+                if (Date.now() < maxDate + 1800000) {
+                    history = history.filter(value => new Date(value.date).getTime() !== maxDate );
+                }
+                history.push(entry);
+                
+                this.writeFileCountHistory(doc, history);
+            }
         }
-
-        history.push(entry);
-        
-        this.writeFileCountHistory(doc, history);
 
         return textCounts;
     }
