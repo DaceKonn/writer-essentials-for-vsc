@@ -72,12 +72,12 @@ export class ProjectFilesHandler {
         
     }
 
-    private static getRoot() {
+    public static getRoot() {
         if (vscode.workspace.workspaceFolders !== undefined && vscode.workspace.workspaceFolders.length > 0) {
             return vscode.workspace.workspaceFolders[0].uri.fsPath;
         }
         else {
-            vscode.window.showWarningMessage("Writer Essentials require you to set up workspace first");
+            vscode.window.showWarningMessage("Writer Essentials couldn't get the root");
             return;
         }
     }
