@@ -25,7 +25,6 @@ export class WordCounter {
     }
 
     public static updateWordCount(): TextCounts {
-        console.log('Update word count');
         // Get the current text editor
         let editor = window.activeTextEditor;
         if (!editor) {
@@ -50,7 +49,6 @@ export class WordCounter {
     }
 
     public static _getWordCount(doc: TextDocument): TextCounts {
-        console.log('Get Word Count');
         let textCounts = new TextCounts();
 
         let docContent = doc.getText();
