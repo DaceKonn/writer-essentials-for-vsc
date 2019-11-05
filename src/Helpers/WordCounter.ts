@@ -1,13 +1,10 @@
 import { TextDocument, window } from "vscode";
-import { mdFrontMatterSectionRegExp, mdFileRegExp, mdFileRegExpFlipped } from "../regexpConstants";
+import { mdFrontMatterSectionRegExp } from "../regexpConstants";
 import { TextCounts } from "../Models/TextCounts";
 import * as fs from 'fs';
 import { ProjectFilesHandler } from "./ProjectFilesHandler";
-import { ProjectBibleFolderPlaces, ProjectStatisticsFolders } from "../Models/ProjectFolders";
 import { WordCountsModel } from "../Models/WordCountsModel";
-import { load } from "js-yaml";
 import mkdirp = require("mkdirp");
-import { parse } from "querystring";
 
 export class WordCounter {
 

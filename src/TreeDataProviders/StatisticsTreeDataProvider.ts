@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import * as dateformat from 'dateformat';
-import { markdownFrontMatterReader } from '../extension';
 import { WordCounter } from '../Helpers/WordCounter';
 import { StatisticsEntry } from '../Models/StatisticsEntry';
 
