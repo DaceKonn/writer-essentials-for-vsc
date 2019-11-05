@@ -15,7 +15,7 @@ export class FrontMatterEntry extends vscode.TreeItem {
         this.subCollection = subCollection;
         this.specialType = specialType;
         
-        if (this.specialType !== undefined && this.subCollection !== undefined && vscode.workspace.workspaceFolders !== undefined) {
+        if (this.specialType !== undefined && this.subCollection !== undefined && vscode.workspace.workspaceFolders !== undefined && vscode.workspace.workspaceFolders.length > 0) {
             for (let sub of this.subCollection) {
                 sub.command = {
                     command: 'vscode.open',
@@ -25,6 +25,9 @@ export class FrontMatterEntry extends vscode.TreeItem {
                 sub.label = '> '+ sub.label;
                 sub.tooltip = 'Open: /ProjectBible/'+this.specialType+'/'+sub.value+'.md';
             }
+        }
+        else {
+            vscode.window.showWarningMessage("Writer Essentials require you to set up workspace first");
         }
     }
 }

@@ -26,8 +26,7 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.window.registerTreeDataProvider('markdown-front-matter-view', markdownFrontMatterTreeDataProvider);
 	vscode.window.registerTreeDataProvider('markdown-stats-view', statisticsTreeDataProvider);
 
-	var pfh = new ProjectFilesHandler();
-	pfh.initProjectStructure();
+	ProjectFilesHandler.registerCommands(context);
 		//context.subscriptions.push(disposable);
 }
 
