@@ -46,6 +46,11 @@
 				"command": "writer-essentials.openOrCreateFile",
 				"title": "Open or create file",
 				"category": "Writer Essentials"
+			},
+			{
+				"command": "writer-essentials.updateWordCount",
+				"title": "Update word count",
+				"category": "Writer Essentials"
 			}
 		]
 	},

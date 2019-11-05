@@ -1,14 +1,30 @@
-import { TextDocument, window } from "vscode";
+import * as vscode from "vscode";
 import { mdFrontMatterSectionRegExp } from "../regexpConstants";
 import { TextCounts } from "../Models/TextCounts";
 import * as fs from 'fs';
 import { ProjectFilesHandler } from "./ProjectFilesHandler";
 import { WordCountsModel } from "../Models/WordCountsModel";
 import mkdirp = require("mkdirp");
+import { window, TextDocument } from "vscode";
 
 export class WordCounter {
+    
+    private static _wordCount : TextCounts = new TextCounts();
+    public static get wordCount() : TextCounts {
+        return this._wordCount;
+    }
+    
+    public static registerCommands(context: vscode.ExtensionContext) {
+        const updateWordCountCommand = 'writer-essentials.updateWordCount';
 
-    public updateWordCount(): TextCounts {
+        const updateWordCountCommandHandler = () => {
+            WordCounter.updateWordCount();
+        };
+
+        context.subscriptions.push(vscode.commands.registerCommand(updateWordCountCommand, updateWordCountCommandHandler));
+    }
+
+    public static updateWordCount(): TextCounts {
         console.log('Update word count');
         // Get the current text editor
         let editor = window.activeTextEditor;
@@ -33,7 +49,7 @@ export class WordCounter {
         } 
     }
 
-    public _getWordCount(doc: TextDocument): TextCounts {
+    public static _getWordCount(doc: TextDocument): TextCounts {
         console.log('Get Word Count');
         let textCounts = new TextCounts();
 
@@ -69,10 +85,11 @@ export class WordCounter {
             }
         }
 
-        return textCounts;
+        this._wordCount = textCounts;
+        return WordCounter.wordCount;
     }
 
-    public loadFileCountHistory(doc: TextDocument): WordCountsModel[] {
+    public static loadFileCountHistory(doc: TextDocument): WordCountsModel[] {
         if (!fs.existsSync(ProjectFilesHandler.statisticsSaveFilePath(doc.uri)+ '.json')) {
             mkdirp.sync(ProjectFilesHandler.statisticsSaveFolderPath(doc.uri));
             fs.writeFileSync(ProjectFilesHandler.statisticsSaveFilePath(doc.uri)+ '.json', '');
@@ -94,7 +111,7 @@ export class WordCounter {
         }
     }
 
-    public writeFileCountHistory(doc: TextDocument, history: WordCountsModel[]) {
+    public static writeFileCountHistory(doc: TextDocument, history: WordCountsModel[]) {
         fs.writeFileSync(ProjectFilesHandler.statisticsSaveFilePath(doc.uri)+ '.json', JSON.stringify(history));
     }
 }

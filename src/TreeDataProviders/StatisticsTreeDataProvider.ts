@@ -16,7 +16,6 @@ export class StatisticsTreeDataProvider implements vscode.TreeDataProvider<Stati
     getChildren(element?: StatisticsEntry | undefined): vscode.ProviderResult<StatisticsEntry[]> {
         if (element === undefined)
         {
-            var wordCounter = new WordCounter();
             let editor = vscode.window.activeTextEditor;
 
             if (!editor) {
@@ -26,14 +25,14 @@ export class StatisticsTreeDataProvider implements vscode.TreeDataProvider<Stati
             }
 
             var out: StatisticsEntry[] = [];
-            var count = wordCounter.updateWordCount();
+            var count = WordCounter.wordCount.characterCount === 0 ? WordCounter.updateWordCount() : WordCounter.wordCount;
             var sub: StatisticsEntry[] = [];
 
             var wc: StatisticsEntry;
             var cc:StatisticsEntry;
 
             if (editor.document.uri.path.indexOf('/Manuscripts/') !== -1) {
-                var history = wordCounter.loadFileCountHistory(editor.document);
+                var history = WordCounter.loadFileCountHistory(editor.document);
 
                 wc = new StatisticsEntry('Word count', count.wordCount, history.map(value => new StatisticsEntry(dateformat(value.date, 'yyyy-mm-dd HH:MM'), value.wordCount)), undefined,vscode.TreeItemCollapsibleState.Collapsed);
                 cc = new StatisticsEntry('Character count', count.characterCount, history.map(value => new StatisticsEntry(dateformat(value.date, 'yyyy-mm-dd HH:MM'), value.charCount)), undefined,vscode.TreeItemCollapsibleState.Collapsed);

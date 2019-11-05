@@ -26,10 +26,6 @@ export class ProjectFilesHandler {
         context.subscriptions.push(vscode.commands.registerCommand(openOrCreateFileCommand, openOrCreateFileCommandHandler));
     }
 
-	public static initFoldersCommandHandler = () => {
-		ProjectFilesHandler.initProjectFolders();
-	}
-
     public static initProjectFolders() {
         var root = this.getRoot();
         if (root !== undefined) {

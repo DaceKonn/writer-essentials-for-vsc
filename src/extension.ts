@@ -5,6 +5,7 @@ import { MarkdownFrontMatterReader } from './FrontMatterReaders/MarkdownFrontMat
 import { MarkdownFrontMatterTreeDataProvider } from './TreeDataProviders/MarkdownFrontMatterTreeDataProvider';
 import { StatisticsTreeDataProvider } from './TreeDataProviders/StatisticsTreeDataProvider';
 import { ProjectFilesHandler } from './Helpers/ProjectFilesHandler';
+import { WordCounter } from './Helpers/WordCounter';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -21,12 +22,15 @@ export function activate(context: vscode.ExtensionContext) {
 	
 	
 	vscode.workspace.onDidChangeTextDocument(change => {if (change !== undefined) {markdownFrontMatterReader.handleTextDocument(change.document);}});
+	vscode.workspace.onDidChangeTextDocument(change => {if (change !== undefined) {WordCounter.updateWordCount();}});
 	vscode.window.onDidChangeActiveTextEditor(change => {if (change !== undefined) {markdownFrontMatterReader.handleTextDocument(change.document);}});
+	vscode.window.onDidChangeActiveTextEditor(change => {if (change !== undefined) {WordCounter.updateWordCount();}});
 
 	vscode.window.registerTreeDataProvider('markdown-front-matter-view', markdownFrontMatterTreeDataProvider);
 	vscode.window.registerTreeDataProvider('markdown-stats-view', statisticsTreeDataProvider);
 
 	ProjectFilesHandler.registerCommands(context);
+	WordCounter.registerCommands(context);
 		//context.subscriptions.push(disposable);
 }
 
