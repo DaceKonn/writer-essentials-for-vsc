@@ -6,5 +6,5 @@ export const ProjectStatisticsFolders: string = 'ProjectStatistics';
 export const ScratchpadFolder: string = 'Scratchpad';
 
 export function getProjectFolders() {
-    return [ManuscriptsFolder, ProjectBibleFolder, ProjectStatisticsFolders, ProjectBibleFolderCharacters, ProjectBibleFolderPlaces];
+    return [ManuscriptsFolder, ProjectBibleFolder, ProjectStatisticsFolders, ProjectBibleFolderCharacters, ProjectBibleFolderPlaces, ScratchpadFolder];
 }
