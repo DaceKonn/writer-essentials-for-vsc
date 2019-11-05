@@ -1,9 +1,10 @@
 import * as fs from 'fs';
 import * as vscode from 'vscode';
-import { getProjectFolders } from '../Models/ProjectFolders';
+import { getProjectFolders, ProjectStatisticsFolders } from '../Models/ProjectFolders';
 //import { workspace, ExtensionContext } from 'vscode';
 import mkdirp = require('mkdirp');
 import { downloadAndUnzipVSCode } from 'vscode-test';
+import { mdFileRegExpFlipped, mdFileRegExp } from '../RegexpConstants';
 
 export class ProjectFilesHandler {
 
@@ -72,13 +73,30 @@ export class ProjectFilesHandler {
         
     }
 
-    public static getRoot() {
+    public static getRoot(flip?: boolean) {
         if (vscode.workspace.workspaceFolders !== undefined && vscode.workspace.workspaceFolders.length > 0) {
-            return vscode.workspace.workspaceFolders[0].uri.fsPath;
+            var path =vscode.workspace.workspaceFolders[0].uri.fsPath;
+            if (flip) {
+                return path.split('\\').join('/');
+            }
+
+            return path;
         }
         else {
             vscode.window.showWarningMessage("Writer Essentials couldn't get the root");
-            return;
+            return '';
         }
+    }
+
+    public static stripPath(path: string) {
+        return path.replace(ProjectFilesHandler.getRoot(true), '').replace('//', '');
+    }
+
+    public static statisticsSaveFolderPath(uri: vscode.Uri) {
+        return ProjectFilesHandler.getRoot(true) +'/'+ ProjectStatisticsFolders + '/' + ProjectFilesHandler.stripPath(uri.path.replace(mdFileRegExpFlipped, ''));
+    }
+
+    public static statisticsSaveFilePath(uri: vscode.Uri) {
+        return ProjectFilesHandler.getRoot(true) +'/'+ ProjectStatisticsFolders + '/' + ProjectFilesHandler.stripPath(uri.path);
     }
 }

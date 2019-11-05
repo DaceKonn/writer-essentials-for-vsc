@@ -38,16 +38,16 @@
 		},
 		"commands": [
 			{
-			  "command": "writer-essentials.initFolders",
-			  "title": "Init Project Folders",
-			  "category": "Writer Essentials"
+				"command": "writer-essentials.initFolders",
+				"title": "Init Project Folders",
+				"category": "Writer Essentials"
 			},
 			{
 				"command": "writer-essentials.openOrCreateFile",
 				"title": "Open or create file",
 				"category": "Writer Essentials"
 			}
-		  ]
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
@@ -57,12 +57,14 @@
 		"test": "node ./out/test/runTest.js"
 	},
 	"devDependencies": {
+		"@types/dateformat": "^3.0.1",
 		"@types/glob": "^7.1.1",
 		"@types/js-yaml": "^3.12.1",
 		"@types/mkdirp": "^0.5.2",
 		"@types/mocha": "^5.2.6",
 		"@types/node": "^10.17.3",
 		"@types/vscode": "^1.38.0",
+		"dateformat": "^3.0.3",
 		"glob": "^7.1.4",
 		"mocha": "^6.1.4",
 		"tslint": "^5.12.1",

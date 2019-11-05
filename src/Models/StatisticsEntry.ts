@@ -7,9 +7,9 @@ export class StatisticsEntry extends vscode.TreeItem {
     subCollection: Array<StatisticsEntry> | undefined;
 
 
-    constructor(key: string, value: string | number | boolean | Date, subCollection?: Array<StatisticsEntry>, isSection?: boolean) {
+    constructor(key: string, value: string | number | boolean | Date, subCollection?: Array<StatisticsEntry>, isSection?: boolean, state?: vscode.TreeItemCollapsibleState) {
         super(isSection === true ? key : key+': '+value, 
-            subCollection !== undefined ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.None);
+            subCollection !== undefined ? (state === undefined ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.Collapsed) : vscode.TreeItemCollapsibleState.None);
         this.key = key;
         this.value = value;
         this.subCollection = subCollection;
