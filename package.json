@@ -10,7 +10,8 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onLanguage:markdown"
+		"onLanguage:markdown",
+		"onCommand:writer-essentials.initFolders"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -34,7 +35,14 @@
 					"name": "Statistics"
 				}
 			]
-		}
+		},
+		"commands": [
+			{
+			  "command": "writer-essentials.initFolders",
+			  "title": "Init Project Folders",
+			  "category": "Writer Essentials"
+			}
+		  ]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
@@ -46,8 +54,9 @@
 	"devDependencies": {
 		"@types/glob": "^7.1.1",
 		"@types/js-yaml": "^3.12.1",
+		"@types/mkdirp": "^0.5.2",
 		"@types/mocha": "^5.2.6",
-		"@types/node": "^10.12.21",
+		"@types/node": "^10.17.3",
 		"@types/vscode": "^1.38.0",
 		"glob": "^7.1.4",
 		"mocha": "^6.1.4",
