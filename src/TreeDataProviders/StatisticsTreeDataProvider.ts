@@ -34,8 +34,17 @@ export class StatisticsTreeDataProvider implements vscode.TreeDataProvider<Stati
             if (editor.document.uri.path.indexOf('/Manuscripts/') !== -1) {
                 var history = WordCounter.loadFileCountHistory(editor.document);
 
-                wc = new StatisticsEntry('Word count', count.wordCount, history.map(value => new StatisticsEntry(dateformat(value.date, 'yyyy-mm-dd HH:MM'), value.wordCount)), undefined,vscode.TreeItemCollapsibleState.Collapsed);
-                cc = new StatisticsEntry('Character count', count.characterCount, history.map(value => new StatisticsEntry(dateformat(value.date, 'yyyy-mm-dd HH:MM'), value.charCount)), undefined,vscode.TreeItemCollapsibleState.Collapsed);
+                wc = new StatisticsEntry(
+                    'Word count', 
+                    count.wordCount, 
+                    history.map(value => new StatisticsEntry(dateformat(value.date, 'yyyy-mm-dd HH:MM'), this.formatCountHistoryEntry(value.wordCount, value.wordDiff))), 
+                    undefined,
+                    vscode.TreeItemCollapsibleState.Collapsed);
+                cc = new StatisticsEntry(
+                    'Character count', 
+                    count.characterCount, 
+                    history.map(value => new StatisticsEntry(dateformat(value.date, 'yyyy-mm-dd HH:MM'), this.formatCountHistoryEntry(value.charCount, value.charDiff))), 
+                    undefined,vscode.TreeItemCollapsibleState.Collapsed);
             }
             else {
                 wc = new StatisticsEntry('Word count', count.wordCount);
@@ -56,5 +65,12 @@ export class StatisticsTreeDataProvider implements vscode.TreeDataProvider<Stati
 
     getTreeItem(element: StatisticsEntry): vscode.TreeItem {
 		return element;
-	}
+    }
+    
+    formatCountHistoryEntry(value: number, diff: number) {
+        if (diff === undefined) {
+            return value + ' (---)';
+        }
+        return value + ' (' + (diff > 0 ? '+' : '') + diff+')';
+    }
 }

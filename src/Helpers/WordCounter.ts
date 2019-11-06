@@ -6,6 +6,7 @@ import { ProjectFilesHandler } from "./ProjectFilesHandler";
 import { WordCountsModel } from "../Models/WordCountsModel";
 import mkdirp = require("mkdirp");
 import { window, TextDocument } from "vscode";
+import { compareValues } from "./DynamicCompare";
 
 export class WordCounter {
     
@@ -67,21 +68,7 @@ export class WordCounter {
             
         }
 
-        if (doc.uri.path.indexOf('/Manuscripts/') !== -1)
-        {
-            var history: WordCountsModel[] = this.loadFileCountHistory(doc);
-            var maxDate = Math.max.apply(null, history.map(value =>new Date(value.date).getTime()));
-            var top = history.find(value => new Date(value.date).getTime() === maxDate );
-            if (top === undefined || top.charCount !== textCounts.characterCount){
-                var entry: WordCountsModel = new WordCountsModel(ProjectFilesHandler.stripPath(doc.uri.path), doc.uri.path, textCounts.wordCount, textCounts.characterCount);
-                if (Date.now() < maxDate + 1800000) {
-                    history = history.filter(value => new Date(value.date).getTime() !== maxDate );
-                }
-                history.push(entry);
-                
-                this.writeFileCountHistory(doc, history);
-            }
-        }
+        this._updateHistory(doc, textCounts);
 
         this._wordCount = textCounts;
         return WordCounter.wordCount;
@@ -119,5 +106,59 @@ export class WordCounter {
 
     public static writeFileCountHistory(doc: TextDocument, history: WordCountsModel[]) {
         fs.writeFileSync(ProjectFilesHandler.statisticsSaveFilePath(doc.uri)+ '.json', JSON.stringify(history));
+    }
+
+    private static _updateHistory(doc: TextDocument, counts: TextCounts) {
+        if (doc.uri.path.indexOf('/Manuscripts/') !== -1)
+        {
+            var history: WordCountsModel[] = this.loadFileCountHistory(doc);
+            var sorted = [...history];
+            var valuesToSet = counts;
+
+            if (history.length > 1) {
+                sorted.sort(compareValues('_date', 'desc'));
+            }
+
+            var top = sorted[0];
+            var entry: WordCountsModel;
+            if (top === undefined){
+                entry = new WordCountsModel(
+                    ProjectFilesHandler.stripPath(doc.uri.path), 
+                    doc.uri.path, 
+                    valuesToSet.wordCount, 
+                    valuesToSet.characterCount,
+                    0,
+                    0);
+            }
+            else if (top.charCount !== valuesToSet.characterCount) {
+                var offset: TextCounts = new TextCounts();
+                if (Date.now() < top.date.getTime() + 1800000) {
+                    history = history.filter(value => new Date(value.date).getTime() !== top.date.getTime() );
+                    if (sorted.length > 1) {
+                        offset.wordCount = sorted[1].wordCount;
+                        offset.characterCount = sorted[1].charCount;
+                    }
+                }
+                else {
+                    offset.wordCount = top.wordCount;
+                    offset.characterCount = top.charCount;
+                }
+
+                entry = new WordCountsModel(
+                    ProjectFilesHandler.stripPath(doc.uri.path), 
+                    doc.uri.path, 
+                    valuesToSet.wordCount, 
+                    valuesToSet.characterCount,
+                    valuesToSet.wordCount - offset.wordCount,
+                    valuesToSet.characterCount - offset.characterCount);
+            }
+            else {
+                return;
+            }
+
+            history.push(entry);
+            
+            this.writeFileCountHistory(doc, history);
+        }
     }
 }

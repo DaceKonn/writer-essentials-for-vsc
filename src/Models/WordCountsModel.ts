@@ -35,20 +35,38 @@ export class WordCountsModel {
     public set charCount(v : number) {
         this._charCount = v;
     }
+
+    public get wordDiff() : number {
+        return this._wordDiff;
+    }
+    public set wordDiff(v : number) {
+        this._wordDiff = v;
+    }
+
+    public get charDiff() : number {
+        return this._charDiff;
+    }
+    public set charDiff(v : number) {
+        this._charDiff = v;
+    }
+    
+    
     
     constructor(
         private _fileName: string,
         private _filePath: string,
         private _wordCount: number,
-        private _charCount: number
+        private _charCount: number,
+        private _wordDiff: number,
+        private _charDiff: number
     )
     {
         this._date = new Date(Date.now());
     }
 
     public static decodeFromJSON(parsed: any) {
-        var model = new WordCountsModel(parsed._fileName, parsed._filePath, parsed._wordCount, parsed._charCount);
-        model.date = parsed._date;
+        var model = new WordCountsModel(parsed._fileName, parsed._filePath, parsed._wordCount, parsed._charCount, parsed._wordDiff, parsed._charDiff);
+        model.date = new Date(parsed._date);
         return model;
     }
 }
