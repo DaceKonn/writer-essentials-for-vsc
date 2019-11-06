@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as dateformat from 'dateformat';
 import { WordCounter } from '../Helpers/WordCounter';
 import { StatisticsEntry } from '../Models/StatisticsEntry';
+import { compareValues } from '../Helpers/DynamicCompare';
 
 export class StatisticsTreeDataProvider implements vscode.TreeDataProvider<StatisticsEntry> {
     private _onDidChangeTreeData: vscode.EventEmitter<StatisticsEntry | null> = new vscode.EventEmitter<StatisticsEntry | null>();
@@ -37,13 +38,27 @@ export class StatisticsTreeDataProvider implements vscode.TreeDataProvider<Stati
                 wc = new StatisticsEntry(
                     'Word count', 
                     count.wordCount, 
-                    history.map(value => new StatisticsEntry(dateformat(value.date, 'yyyy-mm-dd HH:MM'), this.formatCountHistoryEntry(value.wordCount, value.wordDiff))), 
+                    history
+                        .sort(compareValues('_date', 'desc'))
+                        .map(value => 
+                            new StatisticsEntry(
+                                dateformat(value.date, 'yyyy-mm-dd HH:MM'), 
+                                this.formatCountHistoryEntry(value.wordCount, value.wordDiff)
+                                )
+                            ), 
                     undefined,
                     vscode.TreeItemCollapsibleState.Collapsed);
                 cc = new StatisticsEntry(
                     'Character count', 
                     count.characterCount, 
-                    history.map(value => new StatisticsEntry(dateformat(value.date, 'yyyy-mm-dd HH:MM'), this.formatCountHistoryEntry(value.charCount, value.charDiff))), 
+                    history
+                        .sort(compareValues('_date', 'desc'))
+                        .map(value => 
+                            new StatisticsEntry(
+                                dateformat(value.date, 'yyyy-mm-dd HH:MM'), 
+                                this.formatCountHistoryEntry(value.charCount, value.charDiff)
+                                )
+                            ), 
                     undefined,vscode.TreeItemCollapsibleState.Collapsed);
             }
             else {
