@@ -36,7 +36,7 @@ export class WordCounter {
         }
 
         let doc = editor.document;
-        console.log("Update word count, lanugageId: " + doc.languageId);
+
         // Only update status if an MD file
          if (doc.languageId === "markdown" || doc.languageId === "fountain") {
             return this._getWordCount(doc);
