@@ -19,9 +19,9 @@ export class MarkdownFrontMatterReader {
 
         let doc = editor.document;
 
-        if (doc.languageId === "markdown") {
+        if (doc.languageId === "markdown" || doc.languageId === 'fountain') {
             try {
-                var frontM = this.getFrontMatterFromString(doc.getText());
+                var frontM = this.getFrontMatterFromString(doc.getText(), doc.languageId);
                 this.tempDoc = frontM;
                 markdownFrontMatterTreeDataProvider.refresh();
             }
@@ -30,7 +30,7 @@ export class MarkdownFrontMatterReader {
             }
             
         } else {
-            console.log('!markdown');
+            console.log('!markdown && !fountain');
            return;
         } 
     }
@@ -38,12 +38,12 @@ export class MarkdownFrontMatterReader {
 	handleTextDocument(document: vscode.TextDocument | undefined): any {
         if (document !== undefined)
         {
-            if (document.languageId === "markdown") {
+            if (document.languageId === "markdown" || document.languageId === 'fountain') {
                 var text = document.getText();
                 let doc: any;
 
                 try{
-                    doc = this.getFrontMatterFromString(text);
+                    doc = this.getFrontMatterFromString(text, document.languageId);
                     this.tempDoc = doc;
                 }
                 catch{
@@ -53,14 +53,17 @@ export class MarkdownFrontMatterReader {
                 markdownFrontMatterTreeDataProvider.refresh();
                 statisticsTreeDataProvider.refresh();
             }
-            else if (document.languageId === 'fountain') {
-                statisticsTreeDataProvider.refresh();
-            }
         }
 	}
 
-    getFrontMatterFromString(text: string) {
-        var capture = text.match(regExp.mdFrontMatterContentRegExp);
+    getFrontMatterFromString(text: string, languageId: string) {
+        var capture: RegExpMatchArray | null = null;
+        if (languageId === "markdown"){
+            capture = text.match(regExp.mdFrontMatterContentRegExp);
+        }
+        else if (languageId === "fountain") {
+            capture = text.match(regExp.ftFrontMatterContentRegExp);
+        }
         if (capture !== null)
         {
             var doc = yaml.safeLoad(capture[0]);
