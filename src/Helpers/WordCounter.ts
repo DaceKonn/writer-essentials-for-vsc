@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { mdFrontMatterSectionRegExp } from "../regexpConstants";
+import { mdFrontMatterSectionRegExp, ftFrontMatterContentRegExp } from "../regexpConstants";
 import { TextCounts } from "../Models/TextCounts";
 import * as fs from 'fs';
 import { ProjectFilesHandler } from "./ProjectFilesHandler";
@@ -45,7 +45,7 @@ export class WordCounter {
            // this._statusBarItem.text = wordCount !== 1 ? `$(pencil) ${wordCount} Words` : '$(pencil) 1 Word';
           //  this._statusBarItem.show();
         } else {
-            console.log('!markdown');
+           console.log('!markdown || !fountain');
            return new TextCounts();
         } 
     }
@@ -58,6 +58,9 @@ export class WordCounter {
         // Parse out front matter
         if (doc.languageId === 'markdown') {
             docContent = docContent.replace(mdFrontMatterSectionRegExp, '');
+        }
+        else if (doc.languageId === 'fountain') {
+            docContent = docContent.replace(ftFrontMatterContentRegExp, '');
         }
         
         //get character count with white spaces etc.
