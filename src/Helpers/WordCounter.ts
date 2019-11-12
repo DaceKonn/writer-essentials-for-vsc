@@ -26,6 +26,7 @@ export class WordCounter {
     }
 
     public static updateWordCount(): TextCounts {
+        
         // Get the current text editor
         let editor = window.activeTextEditor;
         if (!editor) {
@@ -35,9 +36,9 @@ export class WordCounter {
         }
 
         let doc = editor.document;
-
+        console.log("Update word count, lanugageId: " + doc.languageId);
         // Only update status if an MD file
-         if (doc.languageId === "markdown") {
+         if (doc.languageId === "markdown" || doc.languageId === "fountain") {
             return this._getWordCount(doc);
 
             // Update the status bar
@@ -55,8 +56,10 @@ export class WordCounter {
         let docContent = doc.getText();
 
         // Parse out front matter
-        docContent = docContent.replace(mdFrontMatterSectionRegExp, '');
-
+        if (doc.languageId === 'markdown') {
+            docContent = docContent.replace(mdFrontMatterSectionRegExp, '');
+        }
+        
         //get character count with white spaces etc.
         textCounts.characterCount = docContent.length;
         

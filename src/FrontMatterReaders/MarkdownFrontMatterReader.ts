@@ -53,6 +53,9 @@ export class MarkdownFrontMatterReader {
                 markdownFrontMatterTreeDataProvider.refresh();
                 statisticsTreeDataProvider.refresh();
             }
+            else if (document.languageId === 'fountain') {
+                statisticsTreeDataProvider.refresh();
+            }
         }
 	}
 
