@@ -4,7 +4,7 @@ import { getProjectFolders, ProjectStatisticsFolders } from '../Models/ProjectFo
 //import { workspace, ExtensionContext } from 'vscode';
 import mkdirp = require('mkdirp');
 import { downloadAndUnzipVSCode } from 'vscode-test';
-import { mdFileRegExpFlipped, mdFileRegExp } from '../RegexpConstants';
+import { mdFileRegExpFlipped, mdFileRegExp, fountainFileRegExpFlipped } from '../RegexpConstants';
 
 export class ProjectFilesHandler {
 
@@ -88,8 +88,21 @@ export class ProjectFilesHandler {
         return path.replace(ProjectFilesHandler.getRoot(true), '').replace('//', '');
     }
 
-    public static statisticsSaveFolderPath(uri: vscode.Uri) {
-        return ProjectFilesHandler.getRoot(true) +'/'+ ProjectStatisticsFolders + '/' + ProjectFilesHandler.stripPath(uri.path.replace(mdFileRegExpFlipped, ''));
+    public static statisticsSaveFolderPath(uri: vscode.Uri, languageId: string) {
+        var regex: RegExp;
+        if (languageId === 'markdown') {
+            regex = mdFileRegExpFlipped;
+        }
+        else if (languageId === 'fountain') {
+            regex = fountainFileRegExpFlipped;
+        }
+        else {
+            return "";
+        }
+
+        var trimmedUri = uri.path.replace(regex, '');
+
+        return ProjectFilesHandler.getRoot(true) +'/'+ ProjectStatisticsFolders + '/' + ProjectFilesHandler.stripPath(trimmedUri);
     }
 
     public static statisticsSaveFilePath(uri: vscode.Uri) {

@@ -82,7 +82,8 @@ export class WordCounter {
 
     public static loadFileCountHistory(doc: TextDocument): WordCountsModel[] {
         if (!fs.existsSync(ProjectFilesHandler.statisticsSaveFilePath(doc.uri)+ '.json')) {
-            mkdirp.sync(ProjectFilesHandler.statisticsSaveFolderPath(doc.uri));
+            var path = ProjectFilesHandler.statisticsSaveFolderPath(doc.uri, doc.languageId);
+            mkdirp.sync(path);
             fs.writeFileSync(ProjectFilesHandler.statisticsSaveFilePath(doc.uri)+ '.json', '');
             return [];
         }
