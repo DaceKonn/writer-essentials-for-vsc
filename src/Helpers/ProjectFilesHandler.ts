@@ -85,7 +85,21 @@ export class ProjectFilesHandler {
     }
 
     public static stripPath(path: string) {
-        return path.replace(ProjectFilesHandler.getRoot(true), '').replace('//', '');
+        var rootPath = ProjectFilesHandler.getRoot(true).toLowerCase();
+        var lowPath = path.toLowerCase();
+        var index = lowPath.indexOf(rootPath);
+        var length = rootPath.length;
+
+        if (index === -1) {
+            return path;
+        }
+
+        var substring = path.substr(index, length);
+        var strippedPath = path.replace(substring, '');
+
+        //var strippedPath = path.replace(rootPath, '');
+        strippedPath = strippedPath.replace('//', '');
+        return strippedPath;
     }
 
     public static statisticsSaveFolderPath(uri: vscode.Uri, languageId: string) {
