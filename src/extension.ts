@@ -1,33 +1,33 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import { MarkdownFrontMatterReader } from './FrontMatterReaders/MarkdownFrontMatterReader';
-import { MarkdownFrontMatterTreeDataProvider } from './TreeDataProviders/MarkdownFrontMatterTreeDataProvider';
+import { FrontMatterReader } from './FrontMatterReaders/FrontMatterReader';
+import { FrontMatterTreeDataProvider } from './TreeDataProviders/FrontMatterTreeDataProvider';
 import { StatisticsTreeDataProvider } from './TreeDataProviders/StatisticsTreeDataProvider';
 import { ProjectFilesHandler } from './Helpers/ProjectFilesHandler';
 import { WordCounter } from './Helpers/WordCounter';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-export var markdownFrontMatterReader: MarkdownFrontMatterReader;
-export var markdownFrontMatterTreeDataProvider: MarkdownFrontMatterTreeDataProvider;
+export var frontMatterReader: FrontMatterReader;
+export var frontMatterTreeDataProvider: FrontMatterTreeDataProvider;
 export var statisticsTreeDataProvider : StatisticsTreeDataProvider;
 
 export function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "writer-essentials" is now active!');
 
-	markdownFrontMatterReader = new MarkdownFrontMatterReader();
-	markdownFrontMatterTreeDataProvider = new MarkdownFrontMatterTreeDataProvider(context);
+	frontMatterReader = new FrontMatterReader();
+	frontMatterTreeDataProvider = new FrontMatterTreeDataProvider(context);
 	statisticsTreeDataProvider = new StatisticsTreeDataProvider(context);
 	
 	
-	vscode.workspace.onDidChangeTextDocument(change => {if (change !== undefined) {markdownFrontMatterReader.handleTextDocument(change.document);}});
+	vscode.workspace.onDidChangeTextDocument(change => {if (change !== undefined) {frontMatterReader.handleTextDocument(change.document);}});
 	vscode.workspace.onDidChangeTextDocument(change => {if (change !== undefined) {WordCounter.updateWordCount();}});
-	vscode.window.onDidChangeActiveTextEditor(change => {if (change !== undefined) {markdownFrontMatterReader.handleTextDocument(change.document);}});
+	vscode.window.onDidChangeActiveTextEditor(change => {if (change !== undefined) {frontMatterReader.handleTextDocument(change.document);}});
 	vscode.window.onDidChangeActiveTextEditor(change => {if (change !== undefined) {WordCounter.updateWordCount();}});
 
-	vscode.window.registerTreeDataProvider('markdown-front-matter-view', markdownFrontMatterTreeDataProvider);
-	vscode.window.registerTreeDataProvider('markdown-stats-view', statisticsTreeDataProvider);
+	vscode.window.registerTreeDataProvider('front-matter-view', frontMatterTreeDataProvider);
+	vscode.window.registerTreeDataProvider('stats-view', statisticsTreeDataProvider);
 
 	ProjectFilesHandler.registerCommands(context);
 	WordCounter.registerCommands(context);

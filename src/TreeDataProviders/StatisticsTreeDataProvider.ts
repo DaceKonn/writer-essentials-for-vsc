@@ -3,6 +3,7 @@ import * as dateformat from 'dateformat';
 import { WordCounter } from '../Helpers/WordCounter';
 import { StatisticsEntry } from '../Models/StatisticsEntry';
 import { compareValues } from '../Helpers/DynamicCompare';
+import { WordCountsModel } from '../Models/WordCountsModel';
 
 export class StatisticsTreeDataProvider implements vscode.TreeDataProvider<StatisticsEntry> {
     private _onDidChangeTreeData: vscode.EventEmitter<StatisticsEntry | null> = new vscode.EventEmitter<StatisticsEntry | null>();
@@ -30,7 +31,8 @@ export class StatisticsTreeDataProvider implements vscode.TreeDataProvider<Stati
             var sub: StatisticsEntry[] = [];
 
             var wc: StatisticsEntry;
-            var cc:StatisticsEntry;
+            var cc: StatisticsEntry;
+            var avg: StatisticsEntry;
 
             if (editor.document.uri.path.indexOf('/Manuscripts/') !== -1) {
                 var history = WordCounter.loadFileCountHistory(editor.document);
@@ -60,14 +62,31 @@ export class StatisticsTreeDataProvider implements vscode.TreeDataProvider<Stati
                                 )
                             ), 
                     undefined,vscode.TreeItemCollapsibleState.Collapsed);
+
+                if (history.length > 2) {
+                    var reducedHistory = history.reduce((accumulator, currentValue) => this.reduceHistory(accumulator, currentValue));
+
+                    avg = new StatisticsEntry(
+                        'Averages', 
+                        (reducedHistory.wordCount / history.length), 
+                        undefined, 
+                        undefined,
+                        vscode.TreeItemCollapsibleState.Collapsed);
+                }
+                else {
+                    avg = new StatisticsEntry('Averages', '');
+                }
+
             }
             else {
                 wc = new StatisticsEntry('Word count', count.wordCount);
                 cc = new StatisticsEntry('Character count', count.characterCount);
+                avg = new StatisticsEntry('Averages', '');
             }
             
             sub.push(wc);
             sub.push(cc);
+            sub.push(avg);
             out.push(new StatisticsEntry('File', '', sub, true));
 
             return out;
@@ -87,5 +106,12 @@ export class StatisticsTreeDataProvider implements vscode.TreeDataProvider<Stati
             return value + ' (---)';
         }
         return value + ' (' + (diff > 0 ? '+' : '') + diff+')';
+    }
+
+    reduceHistory(accumulator: WordCountsModel, currentValue: WordCountsModel): WordCountsModel {
+        accumulator.charDiff = accumulator.charDiff + currentValue.charDiff;
+        accumulator.wordDiff = accumulator.wordDiff + currentValue.wordDiff;
+
+        return accumulator;
     }
 }

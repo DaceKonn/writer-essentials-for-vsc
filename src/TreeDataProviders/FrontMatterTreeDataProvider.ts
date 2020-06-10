@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 import { FrontMatterEntry } from "../Models/FrontMatterEntry";
-import { markdownFrontMatterReader } from '../extension';
+import { frontMatterReader } from '../extension';
 
-export class MarkdownFrontMatterTreeDataProvider implements vscode.TreeDataProvider<FrontMatterEntry> {
+export class FrontMatterTreeDataProvider implements vscode.TreeDataProvider<FrontMatterEntry> {
     private _onDidChangeTreeData: vscode.EventEmitter<FrontMatterEntry | null> = new vscode.EventEmitter<FrontMatterEntry | null>();
 	readonly onDidChangeTreeData: vscode.Event<FrontMatterEntry | null> = this._onDidChangeTreeData.event;
 
@@ -15,7 +15,7 @@ export class MarkdownFrontMatterTreeDataProvider implements vscode.TreeDataProvi
     getChildren(element?: FrontMatterEntry | undefined): vscode.ProviderResult<FrontMatterEntry[]> {
         if (element === undefined)
         {
-            return markdownFrontMatterReader.getFrontMatterFromTemp();
+            return frontMatterReader.getFrontMatterFromTemp();
         }
         else {
             if (element.subCollection !== undefined) {

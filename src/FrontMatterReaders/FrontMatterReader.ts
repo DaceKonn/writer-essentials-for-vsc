@@ -1,13 +1,13 @@
 import * as vscode from 'vscode';
 import * as yaml from 'js-yaml';
 import { FrontMatterEntry } from '../Models/FrontMatterEntry';
-import { markdownFrontMatterTreeDataProvider, statisticsTreeDataProvider } from '../extension';
+import { frontMatterTreeDataProvider, statisticsTreeDataProvider } from '../extension';
 import { type } from 'os';
 import { isSpecialType } from '../Models/SpecialFrontMatterTypes';
 import * as regExp from '../RegexpConstants';
 import { window } from 'vscode';
 
-export class MarkdownFrontMatterReader {
+export class FrontMatterReader {
     tempDoc: any;
     //mdFrontMatterRegExp: RegExp = /(?<=---\s)[\s\S]*?(?=\s---)/;
 
@@ -23,7 +23,7 @@ export class MarkdownFrontMatterReader {
             try {
                 var frontM = this.getFrontMatterFromString(doc.getText(), doc.languageId);
                 this.tempDoc = frontM;
-                markdownFrontMatterTreeDataProvider.refresh();
+                frontMatterTreeDataProvider.refresh();
             }
             catch {
 
@@ -50,7 +50,7 @@ export class MarkdownFrontMatterReader {
                     doc = this.tempDoc;
                 }
 
-                markdownFrontMatterTreeDataProvider.refresh();
+                frontMatterTreeDataProvider.refresh();
                 statisticsTreeDataProvider.refresh();
             }
         }
